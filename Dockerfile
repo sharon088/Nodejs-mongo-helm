@@ -35,12 +35,12 @@ WORKDIR /app
 ENV HOME=/home/appuser
 
 # Copy node_modules
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=build /app/node_modules ./node_modules
 
 # Copy application files
-COPY --from=builder /app/devops-assignment-index.html ./
-COPY --from=builder /app/docker-test.js ./
-COPY --from=builder /app/package*.json ./
+COPY --from=build /app/devops-assignment-index.html ./
+COPY --from=build /app/docker-test.js ./
+COPY --from=build /app/package*.json ./
 
 # Switch to the created user
 USER appuser
