@@ -44,7 +44,7 @@ COPY --from=build /app/package*.json ./
 COPY --from=build /app/k8s-test.js ./
 
 # Copy script file
-COPY start.sh ./
+COPY --from=build /app/start.sh ./
 
 #make executable and give permissions to appuser
 RUN chmod +x start.sh
