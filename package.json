@@ -1,0 +1,9 @@
+{
+    "name": "devops-assignment",
+    "version": "1.0.0",
+    "description": "devops assignment",
+    "dependencies": {
+        "express": "*",
+        "mongoose": "*"
+    }
+}

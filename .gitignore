@@ -1,0 +1,16 @@
+*
+!*/
+
+# but these file type
+!*.js
+!*.html
+!*.json
+
+# and these files too
+!.gitignore
+!Dockerfile
+!*.dockerignore
+!*.yaml
+!*.yml
+!*.sh
+!*.md
