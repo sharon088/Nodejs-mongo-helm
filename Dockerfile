@@ -11,7 +11,7 @@ COPY package.json ./
 RUN npm install
 
 # Copy application files
-COPY devops-assignment-index.html docker-test.js ./
+COPY . ./
 
 # Stage 2: Final stage
 FROM node:23-alpine
@@ -28,19 +28,25 @@ RUN apk update && apk add --no-cache \
 RUN addgroup -g 1500 appuser && \
     adduser -u 1500 -G appuser -h /home/user -D appuser
 
-# Set home directory
-ENV HOME=/home/user
-
 # Create app directory and set ownership
 WORKDIR /app
-COPY --from=build /app .
 
-# Create start.sh script
-RUN echo '#!/bin/bash\nnode docker-test.js' > /app/start.sh && \
-    chmod +x /app/start.sh
+# Set home directory
+ENV HOME=/home/appuser
+
+# Copy node_modules
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy application files
+COPY --from=builder /app/devops-assignment-index.html ./
+COPY --from=builder /app/docker-test.js ./
+COPY --from=builder /app/package*.json ./
 
 # Switch to the created user
 USER appuser
+
+COPY start.sh ./
+RUN chmod +x start.sh
 
 # Expose the port the app runs on
 EXPOSE 8080
