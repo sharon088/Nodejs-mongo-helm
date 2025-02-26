@@ -122,6 +122,10 @@ tolerations: []
 
 affinity: {}
 
+mongo:
+  image: mongo
+  port: 27017
+  storageSize: 1Gi
 
 command: ["node"]
 args: ["docker-test.js"]
