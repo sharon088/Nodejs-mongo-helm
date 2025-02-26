@@ -10,7 +10,12 @@
 !.gitignore
 !Dockerfile
 !*.dockerignore
-!*.yaml
-!*.yml
 !*.sh
 !*.md
+!*.txt
+
+# and k8s files
+!*.yaml
+!*.yml
+!*.tpl
+!.helmignore
