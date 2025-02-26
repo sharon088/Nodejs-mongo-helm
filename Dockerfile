@@ -42,11 +42,15 @@ COPY --from=build /app/devops-assignment-index.html ./
 COPY --from=build /app/docker-test.js ./
 COPY --from=build /app/package*.json ./
 
+# Copy script file
+COPY start.sh ./
+
+#make executable and give permissions to appuser
+RUN chmod +x start.sh
+RUN chown appuser:appuser start.sh
+
 # Switch to the created user
 USER appuser
-
-COPY start.sh ./
-RUN chmod +x start.sh
 
 # Expose the port the app runs on
 EXPOSE 8080
