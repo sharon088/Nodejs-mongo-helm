@@ -40,7 +40,6 @@ COPY --from=build /app/node_modules ./node_modules
 # Copy application files
 COPY --from=build /app/devops-assignment-index.html ./
 COPY --from=build /app/docker-test.js ./
-COPY --from=build /app/k8s-test.js ./
 COPY --from=build /app/package*.json ./
 
 # Copy script file
