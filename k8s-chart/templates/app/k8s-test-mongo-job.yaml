@@ -11,4 +11,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node"]
           args: ["src/k8s-test.js"]
+          env:
+            - name: MONGO_SERVICE_NAME
+              value: "{{ .Values.mongo.mongoServiceName }}"
       restartPolicy: Never

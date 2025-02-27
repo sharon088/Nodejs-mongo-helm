@@ -127,7 +127,7 @@ mongo:
   tag: "7.0.17"
   port: 27017
   storageSize: 1Gi
-
+  mongoServiceName: mongodb
 
 # Add NODE_ENV env var
 env:
