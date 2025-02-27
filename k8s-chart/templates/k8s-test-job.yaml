@@ -10,5 +10,5 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node"]
-          args: ["k8s-test.js"]
+          args: ["src/k8s-test.js"]
       restartPolicy: Never
