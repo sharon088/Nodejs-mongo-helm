@@ -11,7 +11,7 @@ COPY package.json ./
 RUN npm install
 
 # Copy application files
-COPY . ./
+COPY src ./src
 
 # Stage 2: Final stage
 FROM node:23-alpine
@@ -37,11 +37,11 @@ ENV HOME=/home/appuser
 # Copy node_modules
 COPY --from=build /app/node_modules ./node_modules
 
-# Copy application files
-COPY --from=build /app/devops-assignment-index.html ./
-COPY --from=build /app/docker-test.js ./
+# Copy the entire src directory
+COPY --from=build /app/src ./src
+
+# Copy package.json to the root of the app directory
 COPY --from=build /app/package*.json ./
-COPY --from=build /app/k8s-test.js ./
 
 # Copy script file
 COPY --from=build /app/start.sh ./
