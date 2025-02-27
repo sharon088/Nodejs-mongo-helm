@@ -13,6 +13,9 @@ RUN npm install
 # Copy application files
 COPY src ./src
 
+# Copy start.sh
+COPY start.sh /app/start.sh 
+
 # Stage 2: Final stage
 FROM node:23-alpine
 
