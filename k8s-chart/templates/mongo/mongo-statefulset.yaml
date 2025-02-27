@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: "{{ .Values.mongo.image }}"
+          image: "{{ .Values.mongo.image }}:{{ .Values.mongo.tag }}"
           ports:
             - containerPort: {{ .Values.mongo.port }}
           volumeMounts:
