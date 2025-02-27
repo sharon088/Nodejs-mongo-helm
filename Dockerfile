@@ -29,7 +29,7 @@ RUN apk update && apk add --no-cache \
 
 # Create user and group with ID 1500
 RUN addgroup -g 1500 appuser && \
-    adduser -u 1500 -G appuser -h /home/user -D appuser
+    adduser -u 1500 -G appuser -h /home/appuser -D appuser
 
 # Create app directory and set ownership
 WORKDIR /app
