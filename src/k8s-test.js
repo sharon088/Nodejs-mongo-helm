@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const url = 'mongodb://mongodb';
+const mongoServiceName = process.env.MONGO_SERVICE_NAME || 'parkentin';
+const url = `mongodb://${mongoServiceName}`;
 
 async function main() {
     console.log('connecting to mongo')
