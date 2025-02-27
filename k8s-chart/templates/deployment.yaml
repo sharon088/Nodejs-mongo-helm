@@ -50,8 +50,6 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          command: {{ .Values.command }} # Added
-          args: {{ .Values.args }} # Added
           env: # Added
             - name: NODE_ENV
               value: {{ .Values.env.NODE_ENV | quote }} 
