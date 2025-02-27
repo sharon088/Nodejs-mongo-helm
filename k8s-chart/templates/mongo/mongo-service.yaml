@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.mongoServiceName }} 
+  name: {{ .Values.mongo.mongoServiceName }} 
 spec:
   selector:
     app: mongo
