@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const url = `mongodb://mongodb;
+const url = `mongodb://mongodb`;
 
 async function main() {
     console.log('connecting to mongo')
