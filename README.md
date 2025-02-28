@@ -267,3 +267,56 @@ After making changes, upgrade the Helm release:
 ```bash
 helm upgrade <release-name> ./k8s-chart
 ```
+
+## Rolling Update and Service Connectivity
+
+### Rolling Update
+
+* **Application Deployment:**
+    * The application deployment utilizes Kubernetes' default rolling update strategy.
+    * This strategy ensures minimal downtime during updates by gradually replacing old Pods with new ones, maintaining application availability.
+    * Kubernetes controls the pace of the update, ensuring a smooth transition without service interruption.
+* **MongoDB Deployment:**
+    * The MongoDB deployment, managed by a StatefulSet, also performs rolling updates.
+    * StatefulSets ensure that updates are performed in a controlled, sequential manner, preserving data consistency.
+    * Each MongoDB Pod is updated one at a time, preventing data corruption and ensuring a reliable database state.
+* **Rationale:**
+    * The default rolling update strategy is chosen for its simplicity and effectiveness in minimizing downtime.
+    * It aligns with best practices for deploying microservices and stateful applications in Kubernetes.
+
+### Service Connectivity
+
+* **MongoDB Service:**
+    * The MongoDB database is exposed as a Kubernetes Service, with the name defined in the `values.yaml` file (`mongo.mongoServiceName`, defaulting to `mongodb`).
+    * This Service provides a stable network endpoint for the MongoDB StatefulSet, abstracting the underlying Pods.
+    * The Service is of type `ClusterIP`, making it accessible within the Kubernetes cluster.
+* **Application Connectivity:**
+    * The application connects to the MongoDB database using the Service name as the hostname in the connection URL (e.g., `mongodb://mongodb`).
+    * Kubernetes' internal DNS resolves the Service name to the appropriate IP address, ensuring reliable connection.
+* **Environment Variable for Service Name:**
+    * The MongoDB Service name is passed to the `k8s-test.js` script using an environment variable (`MONGO_SERVICE_NAME`).
+    * This allows the test script to dynamically adapt to different MongoDB Service names, as defined in the `values.yaml` file.
+    * This ensures that the application and tests always connect to the correct service, even if the service name is changed.
+
+## Key Decisions
+
+* **Helm Chart:**
+    * Using a Helm chart simplifies the deployment and management of the application and MongoDB.
+    * Helm provides templating capabilities, allowing for parameterized deployments and easy customization.
+    * It also manages dependencies and simplifies versioning, making it easier to maintain and update the deployment.
+* **StatefulSet for MongoDB:**
+    * A StatefulSet is chosen for MongoDB to ensure data persistence and consistent network identities for MongoDB Pods.
+    * StatefulSets provide stable hostnames and persistent volumes, which are essential for stateful applications like databases.
+    * This ensures that data is preserved across Pod restarts and updates.
+* **Jobs for Testing:**
+    * Using a Kubernetes Job to run the `k8s-test.js` script ensures that the test runs once to completion and then terminates.
+    * Jobs are ideal for one-time tasks like testing, as they automatically manage Pod lifecycles and completion.
+    * This approach ensures that the test runs in a controlled environment and doesn't interfere with the running application.
+* **Environment Variables:**
+    * Environment variables are used to pass configuration data (like the MongoDB Service name) to the application and test scripts.
+    * This decouples configuration from the application code, making it easier to manage and update.
+    * It also allows for dynamic configuration based on the Kubernetes environment.
+* **`values.yaml`:**
+    * The `values.yaml` file serves as the single source of truth for all configuration values.
+    * This centralizes configuration management, making it easier to customize and maintain the deployment.
+    * It also allows for version control of configuration changes.
