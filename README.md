@@ -261,6 +261,16 @@ Here are some examples of parameters you can customize:
 
     * **Explanation:** To change the Kubernetes Service type (e.g., to `NodePort` or `LoadBalancer`), modify the `type` value. To change the port that the application exposes, modify the `port` value.
 
+* **Test Job Command and Arguments:**
+
+    ```yaml
+    test:
+      command: ["node"]
+      args: ["src/k8s-test.js"]
+    ```
+
+    * **Explanation:** These parameters configure the `k8s-test-mongo-job.yaml` Job, which runs the test script. You can modify the `command` and `args` to change the test execution. For example, to run a different test script, change the `args` value.
+
 
 After making changes, upgrade the Helm release:
 

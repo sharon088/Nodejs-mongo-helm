@@ -9,8 +9,8 @@ spec:
         - name: k8s-test
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["node"]
-          args: ["src/k8s-test.js"]
+          command: {{ .Values.test.command }}
+          args: {{ .Values.test.args }}
           env:
             - name: MONGO_SERVICE_NAME
               value: "{{ .Values.mongo.mongoServiceName }}"

@@ -130,6 +130,10 @@ mongo:
   mongoServiceName: mongodb
   replicas: 1
 
+test:
+  command: ["node"]
+  args: ["src/k8s-test.js"]
+
 # Add NODE_ENV env var
 env:
   NODE_ENV: production
