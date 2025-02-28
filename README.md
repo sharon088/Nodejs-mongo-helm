@@ -28,7 +28,7 @@ Before beginning, ensure that the following tools are installed on your machine:
 **Clone the project repository:**
 
     ```bash
-    git clone [https://github.com/sharon088/ycon.git](https://github.com/sharon088/ycon.git)
+    git clone https://github.com/sharon088/ycon.git
     cd ycon
     ```
 
