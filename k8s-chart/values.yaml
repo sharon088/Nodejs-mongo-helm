@@ -128,6 +128,7 @@ mongo:
   port: 27017
   storageSize: 1Gi
   mongoServiceName: mongodb
+  replicas: 1
 
 # Add NODE_ENV env var
 env:

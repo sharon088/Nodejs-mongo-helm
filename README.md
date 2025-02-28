@@ -157,13 +157,14 @@ You can customize the deployment parameters by modifying the `values.yaml` file 
 
 Here are some examples of parameters you can customize:
 
-* **Replica Count:**
+* **MongoDB Replicas:**
 
     ```yaml
-    replicaCount: 1
+    mongo:
+      replicas: 1
     ```
 
-    * **Explanation:** To scale the application deployment, change the `replicaCount` value. For example, `replicaCount: 3` will create three replicas of your application Pods.
+    * **Explanation:** To scale the MongoDB StatefulSet, change the `replicas` value. For example, `replicas: 3` will create three MongoDB Pods. Note that MongoDB clustering requires additional configuration.
 
 * **MongoDB Image and Tag:**
 
@@ -184,6 +185,15 @@ Here are some examples of parameters you can customize:
 
     * **Explanation:** To increase or decrease the storage size, modify the `storageSize` value (e.g., `storageSize: 5Gi`).
 
+* **MongoDB Service Name:**
+
+    ```yaml
+    mongo:
+      mongoServiceName: mongodb
+    ```
+
+    * **Explanation:** To change the name of the MongoDB service, modify the `mongoServiceName` value. This name must match the connection string used by your application (e.g., `mongodb://<mongoServiceName>`).
+
 * **Application Image and Tag:**
 
     ```yaml
@@ -194,15 +204,6 @@ Here are some examples of parameters you can customize:
     ```
 
     * **Explanation:** To use a different application image, change the `repository` value. To use a different tag, change the `tag` value. To change the image pull policy, modify the `pullPolicy` value. Remember to replace `<your-docker-username>` with your actual docker username.
-
-* **MongoDB Service Name:**
-
-    ```yaml
-    mongo:
-      mongoServiceName: mongodb
-    ```
-
-    * **Explanation:** To change the name of the MongoDB service, modify the `mongoServiceName` value. This is used to connect to the mongodb service from the application.
 
 * **Application Node Environment:**
 
