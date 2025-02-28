@@ -23,6 +23,14 @@ Before beginning, ensure that the following tools are installed on your machine:
 4. **Install Helm**:
    - Follow the guide for installing Helm [here](https://helm.sh/docs/intro/install/).
 
+## Getting the Project
+
+**Clone the project repository:**
+
+    ```bash
+    git clone [https://github.com/sharon088/ycon.git](https://github.com/sharon088/ycon.git)
+    cd ycon
+    ```
 
 ## Part 1: Docker Containerization
 
@@ -74,27 +82,14 @@ I deployed the application and MongoDB database to a Kubernetes cluster using a 
 
 ### Steps to Deploy the Application and MongoDB using Helm
 
-1.  **Clone the project repository:**
-
-    ```bash
-    git clone [https://github.com/sharon088/ycon.git](https://github.com/sharon088/ycon.git)
-    cd ycon
-    ```
-
-2.  **Navigate to the project root directory.**
-
-    ```bash
-    cd ycon
-    ```
-
-3.  **Install the Helm chart** using the following command:
+1.  **Navigate to the project root directory.** (You should already be there after the `git clone`.)
+2.  **Install the Helm chart** using the following command:
 
     ```bash
     helm install <release-name> ./k8s-chart
     ```
 
-    * This command deploys the application and MongoDB database to your Kubernetes cluster.
-    * Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
+    * This command deploys the application and MongoDB database to your Kubernetes cluster. Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
     * Ensure you are in the root directory of your project when you run this command.
 
 ### Helm Chart Breakdown
