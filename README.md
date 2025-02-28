@@ -157,6 +157,14 @@ You can customize the deployment parameters by modifying the `values.yaml` file 
 
 Here are some examples of parameters you can customize:
 
+* **Application Replicas:**
+
+    ```yaml
+    replicaCount: 1
+    ```
+
+    * **Explanation:** To scale the application deployment, change the `replicaCount` value. For example, `replicaCount: 3` will create three replicas of your application Pods.
+
 * **MongoDB Replicas:**
 
     ```yaml
@@ -236,7 +244,6 @@ Here are some examples of parameters you can customize:
     ```
 
     * **Explanation:** To change the Kubernetes Service type (e.g., to `NodePort` or `LoadBalancer`), modify the `type` value. To change the port that the application exposes, modify the `port` value.
-
 
 
 After making changes, upgrade the Helm release:
