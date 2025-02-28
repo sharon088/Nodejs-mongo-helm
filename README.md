@@ -26,9 +26,12 @@ Before beginning, ensure that the following tools are installed on your machine:
 ## Getting the Project
 
 **Clone the project repository:**
+
+    ```bash
     git clone https://github.com/sharon088/ycon.git
     cd ycon
-    
+    ```
+
 ## Part 1: Docker Containerization
 
 ### Objective
