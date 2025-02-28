@@ -169,6 +169,9 @@ After installing the Helm chart, you can access the application using port forwa
     * Visit `http://127.0.0.1:8080/health` to access the health endpoint. You should see "healthy".
     * Visit `http://127.0.0.1:8080/assignment` to access the assignment endpoint. You should see the `devops-assignment-index.html` content.
 
+4. **Stop Port Forwarding:**
+
+    * To stop the port forwarding, press `Ctrl + C` in the terminal where the `kubectl port-forward` command is running.
 
 ### Helm Chart Breakdown
 
