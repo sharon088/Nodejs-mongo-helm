@@ -28,7 +28,7 @@ Before beginning, ensure that the following tools are installed on your machine:
 
 ### Objective
 
-We created a multi-stage Dockerfile for building and deploying the application.
+I created a multi-stage Dockerfile for building and deploying the application.
 
 ### Steps to Build the Docker Container
 
@@ -70,7 +70,7 @@ We created a multi-stage Dockerfile for building and deploying the application.
 
 ### Objective
 
-We deployed the application and MongoDB database to a Kubernetes cluster using a Helm chart to simplify management and customization.
+I deployed the application and MongoDB database to a Kubernetes cluster using a Helm chart to simplify management and customization.
 
 ### Steps to Deploy the Application and MongoDB using Helm
 
@@ -325,7 +325,7 @@ helm upgrade <release-name> ./k8s-chart
 
 This project successfully demonstrates a modern application deployment using Docker and Kubernetes with Helm.
 
-We built an efficient Docker image using a multi-stage Dockerfile.
+I built an efficient Docker image using a multi-stage Dockerfile.
 
 Helm simplified the deployment and management of both the application and MongoDB.
 
@@ -336,5 +336,3 @@ MongoDB's StatefulSet ensured data persistence and reliable updates.
 Kubernetes Jobs facilitated automated testing.
 
 Environment variables and Services ensured seamless connectivity.
-
-This project showcases best practices for deploying microservices in Kubernetes, emphasizing automation, scalability, and maintainability.
