@@ -96,27 +96,50 @@ I deployed the application and MongoDB database to a Kubernetes cluster using a 
 
 ### Verifying the Deployment
 
-1.  Check the status of the MongoDB StatefulSet:
+1.  **Check the status of the MongoDB StatefulSet:**
 
     ```bash
     kubectl get statefulsets <release-name>-mongo
     ```
 
-2.  Check the status of the application Job:
+2.  **Check the status of the application Job:**
 
     ```bash
     kubectl get jobs <release-name>-k8s-test
     ```
 
-3.  Check the logs of the `k8s-test` Job to verify successful MongoDB connection:
+3.  **Check the status of the application Job Pods:**
 
     ```bash
-    kubectl logs <your-k8s-test-pod-name>
+    kubectl get pods -l "job-name=<release-name>-k8s-test"
     ```
 
-    * Replace `<your-k8s-test-pod-name>` with the name of the Pod created by the Job.
+    * You may observe a Pod with a status of `Init:0/1`. This indicates that the init container, named `wait-for-mongodb`, is running but has not yet completed successfully.
+    * Once the init container completes, the Pod's status will change to `Init:1/1`, indicating successful completion.
+    * **What is an Init Container?**
+        * Init containers are specialized containers that run *before* the main containers in a Pod. They are used to perform initialization tasks that must be completed before the application can start.
+        * In this case, the init container is defined in the `k8s-test-mongo-job.yaml` file.
+        * The init container uses `busybox` and the `nc -z` command to verify that the MongoDB Service is reachable on the specified port.
+        * **`busybox`:** A lightweight image containing common Unix utilities, including `nc` (netcat).
+        * **`nc -z`:** A command that checks if a port is open without sending data.
+        * The init container ensures that the main `k8s-test` container only starts after MongoDB is ready.
+    * After the init container completes and you see the `Init:1/1` status, the main container will start, and the Pod's status will change to `Running`.
 
-4.  Check the status of the MongoDB Service:
+4.  **Verify Job Pod Logs and MongoDB Connection:**
+
+    ```bash
+    export JOB_POD_NAME=$(kubectl get pods -namespace default -l "job-name=<release-name>-k8s-test" -o jsonpath="{.items[0].metadata.name}")
+    kubectl logs $JOB_POD_NAME
+    ```
+
+    * You should see output similar to:
+
+        ```
+        connecting to mongo
+        connected to mongo
+        ```
+
+5.  **Check the status of the MongoDB Service:**
 
     ```bash
     kubectl get svc mongodb
@@ -141,32 +164,11 @@ After installing the Helm chart, you can access the application using port forwa
     ```
 
 3.  **Open your browser:**
+
     * Visit `http://127.0.0.1:8080` to access the application's root endpoint. You should see "Hello!".
     * Visit `http://127.0.0.1:8080/health` to access the health endpoint. You should see "healthy".
     * Visit `http://127.0.0.1:8080/assignment` to access the assignment endpoint. You should see the `devops-assignment-index.html` content.
 
-### Verifying Job Pod Logs
-
-1.  **Get the Job Pod name:**
-
-    ```bash
-    export JOB_POD_NAME=$(kubectl get pods --namespace default -l "job-name=<release-name>-k8s-test" -o jsonpath="{.items[0].metadata.name}")
-    ```
-
-    * Replace `<release-name>` with the name you used for your Helm release.
-
-2.  **View the Job Pod logs:**
-
-    ```bash
-    kubectl logs $JOB_POD_NAME
-    ```
-
-    * You should see output similar to:
-
-        ```
-        connecting to mongo
-        connected to mongo
-        ```
 
 ### Helm Chart Breakdown
 
