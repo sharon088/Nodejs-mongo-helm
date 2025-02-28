@@ -25,10 +25,12 @@ Before beginning, ensure that the following tools are installed on your machine:
 
 ## Getting the Project
 
-**Clone the project repository:** using the following command:
+## Getting the Project
+
+1.  **Clone the project repository:**
 
     ```bash
-    git clone https://github.com/sharon088/ycon.git
+    git clone [https://github.com/sharon088/ycon.git](https://github.com/sharon088/ycon.git)
     cd ycon
     ```
     
