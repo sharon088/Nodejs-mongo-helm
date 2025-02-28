@@ -155,18 +155,69 @@ We deployed the application and MongoDB database to a Kubernetes cluster using a
 
 You can customize the deployment parameters by modifying the `values.yaml` file in the `k8s-chart` directory.
 
+Here are some examples of parameters you can customize:
+
 * **MongoDB Image and Tag:**
-    * Modify the `mongo.image` and `mongo.tag` values.
+
+    ```yaml
+    mongo:
+      image: mongo
+      tag: "7.0.17"
+    ```
+
+    * **Explanation:** To use a different MongoDB version, change the `tag` value (e.g., `tag: "6.0"`). To use a different MongoDB image, change the `image` value.
+
 * **MongoDB Storage Size:**
-    * Modify the `mongo.storageSize` value.
+
+    ```yaml
+    mongo:
+      storageSize: 1Gi
+    ```
+
+    * **Explanation:** To increase or decrease the storage size, modify the `storageSize` value (e.g., `storageSize: 5Gi`).
+
 * **Application Image and Tag:**
-    * Modify the `image.repository`, `image.tag`, and `image.pullPolicy` values.
+
+    ```yaml
+    image:
+      repository: <your-docker-username>/devops-assignment
+      pullPolicy: IfNotPresent
+      tag: "latest"
+    ```
+
+    * **Explanation:** To use a different application image, change the `repository` value. To use a different tag, change the `tag` value. To change the image pull policy, modify the `pullPolicy` value. Remember to replace `<your-docker-username>` with your actual docker username.
+
 * **MongoDB Service Name:**
-    * Modify the `mongo.mongoServiceName` value.
+
+    ```yaml
+    mongo:
+      mongoServiceName: mongodb
+    ```
+
+    * **Explanation:** To change the name of the MongoDB service, modify the `mongoServiceName` value. This is used to connect to the mongodb service from the application.
+
 * **Application Node Environment:**
-    * Modify the `env.NODE_ENV` to change the node environment.
-* **Application resources:**
-    * Modify the resources section.
+
+    ```yaml
+    env:
+      NODE_ENV: production
+    ```
+
+    * **Explanation:** To change the Node.js environment, modify the `NODE_ENV` value (e.g., `NODE_ENV: development`).
+
+* **Application Resources:**
+
+    ```yaml
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    ```
+
+    * **Explanation:** To adjust resource limits and requests, modify the `limits.memory`, `requests.cpu`, and `requests.memory` values.
+
 
 After making changes, upgrade the Helm release:
 
