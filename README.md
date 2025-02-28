@@ -128,7 +128,7 @@ I deployed the application and MongoDB database to a Kubernetes cluster using a 
 4.  **Verify Job Pod Logs and MongoDB Connection:**
 
     ```bash
-    export JOB_POD_NAME=$(kubectl get pods -namespace default -l "job-name=<release-name>-k8s-test" -o jsonpath="{.items[0].metadata.name}")
+    export JOB_POD_NAME=$(kubectl get pods -n default -l "job-name=<release-name>-k8s-test" -o jsonpath="{.items[0].metadata.name}")
     kubectl logs $JOB_POD_NAME
     ```
 
