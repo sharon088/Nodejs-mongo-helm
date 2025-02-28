@@ -24,35 +24,86 @@ Before beginning, ensure that the following tools are installed on your machine:
    - Follow the guide for installing Helm [here](https://helm.sh/docs/intro/install/).
 
 
-## Step-by-Step Instructions
+## Part 1: Docker Containerization
 
-### 1. Build the Docker Container
+### Objective
 
-1.  Navigate to the project directory.
-2.  Build the Docker image using the following command:
+We created a multi-stage Dockerfile for building and deploying the application.
+
+### Steps to Build the Docker Container
+
+1.  **Navigate to the root directory** of the project.
+2.  **Build the Docker image** using the following command:
 
     ```bash
     docker build -t <your-docker-username>/devops-assignment:latest .
     ```
 
-    * This command builds the Docker image and tags it as `<your-docker-username>/devops-assignment:latest`. Replace `<your-docker-username>` with your Docker Hub username or the username of your container registry.
+    This command will build a Docker image using the multi-stage Dockerfile. The first stage installs dependencies, and the second stage prepares the final container by copying over the necessary files, installing required packages, and setting up user permissions. Replace `<your-docker-username>` with your Docker Hub username or the username of your container registry.
 
-3.  (Optional) Push the Docker image to a container registry (e.g., Docker Hub):
+### Dockerfile Breakdown
 
-    ```bash
-    docker push <your-docker-username>/devops-assignment:latest
-    ```
+* **Stage 1: Build Stage**
+    * Uses `node:23-alpine` as the base image.
+    * Sets the working directory to `/app`.
+    * Copies `package.json` and installs dependencies using `npm install`.
+    * Copies the application source code (`src`) and `start.sh` script.
+    * This stage focuses on building the application and its dependencies.
+* **Stage 2: Final Stage**
+    * Uses `node:23-alpine` as the base image again, creating a clean environment.
+    * Installs required packages (`ca-certificates`, `bash`, `vim`, `procps`, `curl`).
+    * Creates a user and group (`appuser`) with ID 1500 to run the application securely.
+    * Copies `node_modules` and other application files from the first stage.
+    * Sets up the required environment and permissions for the `start.sh` script.
+    * Exposes port 8080 and runs the application via the `start.sh` script.
+    * This stage creates the final, minimal Docker image for deployment.
 
-### 2. Deploy the Application and MongoDB using Helm
+## Part 2: Kubernetes Deployment with Helm
 
-1.  Navigate to the `k8s-chart` directory.
-2.  Install the Helm chart:
+### Objective
+
+We deployed the application and MongoDB database to a Kubernetes cluster using a Helm chart to simplify management and customization.
+
+### Steps to Deploy the Application and MongoDB using Helm
+
+1.  **Navigate to the `k8s-chart` directory.**
+2.  **Install the Helm chart** using the following command:
 
     ```bash
     helm install <release-name> ./k8s-chart
     ```
 
-    * This command deploys the application and MongoDB database to your Kubernetes cluster. Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
+    This command deploys the application and MongoDB database to your Kubernetes cluster. Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
+
+### Helm Chart Breakdown
+
+* **`values.yaml`:**
+    * Contains configuration values for the deployment, such as image names, tags, ports, and resource limits.
+    * Allows for easy customization of the deployment without modifying the templates directly.
+* **`Chart.yaml`:**
+    * Defines metadata about the Helm chart, such as its name, version, and description.
+* **`templates/` directory:**
+    * Contains Kubernetes manifest templates that are rendered by Helm.
+    * Includes templates for the MongoDB StatefulSet, Service, and application Job.
+    * `k8s-test-mongo-job.yaml`: This job is used to run the test script `k8s-test.js`.
+    * `mongo-service.yaml`: Creates a kubernetes service, that exposes the mongodb statefulset.
+    * `mongo-statefulset.yaml`: Creates a statefulset that runs the mongodb database.
+    * `deployment.yaml`: Creates a deployment that runs the application.
+* **MongoDB Service:**
+    * Exposes the MongoDB database as a Kubernetes Service, allowing the application to connect to it using the service name.
+* **MongoDB StatefulSet:**
+    * Ensures data persistence and consistent network identities for MongoDB Pods.
+    * Uses persistent volumes to store MongoDB data.
+* **Application Job:**
+    * Runs the `k8s-test.js` script to test the connection to the MongoDB database.
+    * Ensures that the test runs once and then terminates.
+* **Environment Variables:**
+    * Used to pass configuration data (like the MongoDB service name) to the application and test scripts.
+    * The `MONGO_SERVICE_NAME` environment variable is passed to the `k8s-test.js` script.
+* **Values.yaml:**
+    * The `values.yaml` file serves as the single source of truth for all configuration values.
+
+## Verification, Customization, Rolling Updates, and Service Connectivity
 
 ### 3. Verify the Deployment
 
@@ -62,14 +113,11 @@ Before beginning, ensure that the following tools are installed on your machine:
     kubectl get statefulsets <release-name>-mongo
     ```
 
-    * Replace `<release-name>` with your release name.
-
 2.  Check the status of the application Job:
 
     ```bash
     kubectl get jobs <release-name>-k8s-test
     ```
-    * Replace `<release-name>` with your release name.
 
 3.  Check the logs of the `k8s-test` Job to verify successful MongoDB connection:
 
@@ -77,30 +125,28 @@ Before beginning, ensure that the following tools are installed on your machine:
     kubectl logs <your-k8s-test-pod-name>
     ```
 
-    * Replace `<your-k8s-test-pod-name>` with the name of the Pod created by the Job.
-
 4.  Check the status of the MongoDB Service:
 
     ```bash
     kubectl get svc mongodb
     ```
 
-## Customizing Deployment Parameters
+### Customizing Deployment Parameters
 
 You can customize the deployment parameters by modifying the `values.yaml` file in the `k8s-chart` directory.
 
 * **MongoDB Image and Tag:**
-    * Modify the `mongo.image` and `mongo.tag` values to use a different MongoDB image or tag.
+    * Modify the `mongo.image` and `mongo.tag` values.
 * **MongoDB Storage Size:**
-    * Modify the `mongo.storageSize` value to change the persistent volume size for MongoDB.
+    * Modify the `mongo.storageSize` value.
 * **Application Image and Tag:**
-    * Modify the `image.repository`, `image.tag`, and `image.pullPolicy` values to use a different application image or tag.
+    * Modify the `image.repository`, `image.tag`, and `image.pullPolicy` values.
 * **MongoDB Service Name:**
-    * Modify the `mongo.mongoServiceName` value to change the name of the MongoDB service.
+    * Modify the `mongo.mongoServiceName` value.
 * **Application Node Environment:**
     * Modify the `env.NODE_ENV` to change the node environment.
 * **Application resources:**
-    * Modify the resources section, to change the memory and cpu requests and limits.
+    * Modify the resources section.
 
 After making changes, upgrade the Helm release:
 
