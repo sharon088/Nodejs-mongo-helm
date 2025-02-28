@@ -47,8 +47,7 @@ We created a multi-stage Dockerfile for building and deploying the application.
     docker push <your-docker-username>/devops-assignment:latest
     ```
 
-    This command pushes the built Docker image to a container registry, making it accessible to your Kubernetes cluster. This step is necessary if your Kubernetes cluster is configured to pull images from a remote registry.
-
+    This command pushes the built Docker image to a container registry, making it accessible to your Kubernetes cluster.
 
 ### Dockerfile Breakdown
 
