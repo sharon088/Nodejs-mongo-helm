@@ -72,6 +72,18 @@ We created a multi-stage Dockerfile for building and deploying the application.
 
 We deployed the application and MongoDB database to a Kubernetes cluster using a Helm chart to simplify management and customization.
 
+### Additional Objective Explanations
+
+* **Deploy MongoDB:**
+    * MongoDB is deployed as a `StatefulSet` using the `mongo-statefulset.yaml` template.
+    * It utilizes a persistent volume to ensure data persistence across Pod restarts and updates.
+    * MongoDB configurations, such as image, tag, storage size, and service name, can be customized through the `mongo` values section in `values.yaml`.
+* **Deploy the Application:**
+    * The application is deployed using the `deployment.yaml` template.
+    * The environment variable `NODE_ENV` is set to `production` via the `env` section of the `deployment.yaml` file.
+    * The application is configured to connect to MongoDB via a Kubernetes `Service` named `mongodb`, which is defined in the `mongo-service.yaml` template.
+
+
 ### Steps to Deploy the Application and MongoDB using Helm
 
 1.  **Navigate to the `k8s-chart` directory.**
