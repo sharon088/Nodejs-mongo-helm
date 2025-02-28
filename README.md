@@ -25,8 +25,6 @@ Before beginning, ensure that the following tools are installed on your machine:
 
 ## Getting the Project
 
-## Getting the Project
-
 1.  **Clone the project repository:**
 
     ```bash
@@ -346,16 +344,8 @@ helm upgrade <release-name> ./k8s-chart
     * The MongoDB deployment, managed by a StatefulSet, also performs rolling updates.
     * StatefulSets ensure that updates are performed in a controlled, sequential manner, preserving data consistency.
     * Each MongoDB Pod is updated one at a time, preventing data corruption and ensuring a reliable database state.
-* **Rationale:**
-    * The default rolling update strategy is chosen for its simplicity and effectiveness in minimizing downtime.
-    * It aligns with best practices for deploying microservices and stateful applications in Kubernetes.
 
 ### Service Connectivity
-
-* **MongoDB Service:**
-    * The MongoDB database is exposed as a Kubernetes Service, with the name defined in the `values.yaml` file (`mongo.mongoServiceName`, defaulting to `mongodb`).
-    * This Service provides a stable network endpoint for the MongoDB StatefulSet, abstracting the underlying Pods.
-    * The Service is of type `ClusterIP`, making it accessible within the Kubernetes cluster.
 * **Application Connectivity:**
     * The application connects to the MongoDB database using the Service name as the hostname in the connection URL (e.g., `mongodb://mongodb`).
     * Kubernetes' internal DNS resolves the Service name to the appropriate IP address, ensuring reliable connection.
