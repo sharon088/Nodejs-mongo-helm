@@ -41,6 +41,15 @@ We created a multi-stage Dockerfile for building and deploying the application.
 
     This command will build a Docker image using the multi-stage Dockerfile. The first stage installs dependencies, and the second stage prepares the final container by copying over the necessary files, installing required packages, and setting up user permissions. Replace `<your-docker-username>` with your Docker Hub username or the username of your container registry.
 
+3.  **Push the Docker image to a container registry (e.g., Docker Hub):**
+
+    ```bash
+    docker push <your-docker-username>/devops-assignment:latest
+    ```
+
+    This command pushes the built Docker image to a container registry, making it accessible to your Kubernetes cluster. This step is necessary if your Kubernetes cluster is configured to pull images from a remote registry.
+
+
 ### Dockerfile Breakdown
 
 * **Stage 1: Build Stage**
