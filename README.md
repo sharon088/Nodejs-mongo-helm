@@ -94,6 +94,80 @@ I deployed the application and MongoDB database to a Kubernetes cluster using a 
     * This command deploys the application and MongoDB database to your Kubernetes cluster. Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
     * Ensure you are in the root directory of your project when you run this command.
 
+### Verifying the Deployment
+
+1.  Check the status of the MongoDB StatefulSet:
+
+    ```bash
+    kubectl get statefulsets <release-name>-mongo
+    ```
+
+2.  Check the status of the application Job:
+
+    ```bash
+    kubectl get jobs <release-name>-k8s-test
+    ```
+
+3.  Check the logs of the `k8s-test` Job to verify successful MongoDB connection:
+
+    ```bash
+    kubectl logs <your-k8s-test-pod-name>
+    ```
+
+    * Replace `<your-k8s-test-pod-name>` with the name of the Pod created by the Job.
+
+4.  Check the status of the MongoDB Service:
+
+    ```bash
+    kubectl get svc mongodb
+    ```
+
+### Verifying Application Access
+
+After installing the Helm chart, you can access the application using port forwarding:
+
+1.  **Get the Pod name:**
+
+    ```bash
+    export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=k8s-chart,app.kubernetes.io/instance=<release-name>" -o jsonpath="{.items[0].metadata.name}")
+    ```
+
+    * Replace `<release-name>` with the name you used for your Helm release.
+
+2.  **Forward the port:**
+
+    ```bash
+    kubectl --namespace default port-forward $POD_NAME 8080:8080
+    ```
+
+3.  **Open your browser:**
+    * Visit `http://127.0.0.1:8080` to access the application's root endpoint. You should see "Hello!".
+    * Visit `http://127.0.0.1:8080/health` to access the health endpoint. You should see "healthy".
+    * Visit `http://127.0.0.1:8080/assignment` to access the assignment endpoint. You should see the `devops-assignment-index.html` content.
+
+### Verifying Job Pod Logs
+
+1.  **Get the Job Pod name:**
+
+    ```bash
+    export JOB_POD_NAME=$(kubectl get pods --namespace default -l "job-name=<release-name>-k8s-test" -o jsonpath="{.items[0].metadata.name}")
+    ```
+
+    * Replace `<release-name>` with the name you used for your Helm release.
+
+2.  **View the Job Pod logs:**
+
+    ```bash
+    kubectl logs $JOB_POD_NAME
+    ```
+
+    * You should see output similar to:
+
+        ```
+        connecting to mongo
+        connected to mongo
+        ```
+
 ### Helm Chart Breakdown
 
 * **`values.yaml`:**
@@ -150,33 +224,7 @@ I deployed the application and MongoDB database to a Kubernetes cluster using a 
     * Used to pass configuration data (like the MongoDB service name) to the application and test scripts.
     * The `MONGO_SERVICE_NAME` environment variable is passed to the `k8s-test.js` script, ensuring dynamic service name resolution.
 
-## Verification, Customization, Rolling Updates, and Service Connectivity
-
-### 3. Verify the Deployment
-
-1.  Check the status of the MongoDB StatefulSet:
-
-    ```bash
-    kubectl get statefulsets <release-name>-mongo
-    ```
-
-2.  Check the status of the application Job:
-
-    ```bash
-    kubectl get jobs <release-name>-k8s-test
-    ```
-
-3.  Check the logs of the `k8s-test` Job to verify successful MongoDB connection:
-
-    ```bash
-    kubectl logs <your-k8s-test-pod-name>
-    ```
-
-4.  Check the status of the MongoDB Service:
-
-    ```bash
-    kubectl get svc mongodb
-    ```
+## Customization, Rolling Updates, and Service Connectivity
 
 ### Customizing Deployment Parameters
 
@@ -341,19 +389,3 @@ helm upgrade <release-name> ./k8s-chart
     * The `values.yaml` file serves as the single source of truth for all configuration values.
     * This centralizes configuration management, making it easier to customize and maintain the deployment.
     * It also allows for version control of configuration changes.
-
-## Conclusion
-
-This project successfully demonstrates a modern application deployment using Docker and Kubernetes with Helm.
-
-I built an efficient Docker image using a multi-stage Dockerfile.
-
-Helm simplified the deployment and management of both the application and MongoDB.
-
-The `values.yaml` file provided easy customization.
-
-MongoDB's StatefulSet ensured data persistence and reliable updates.
-
-Kubernetes Jobs facilitated automated testing.
-
-Environment variables and Services ensured seamless connectivity.
