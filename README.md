@@ -1,96 +1,39 @@
-# DevOps Assignment - Application Deployment with MongoDB
+# DevOps Assignment - Docker, Kubernetes, and Helm
 
-This document outlines the steps to build, deploy, and customize the application and MongoDB database using a Helm chart. It also explains key design decisions and how the solution meets the assignment requirements.
+This README provides detailed instructions on how to build and deploy the application and MongoDB using Docker, Kubernetes, and Helm. It explains how to customize deployment parameters and describes the rolling update and service connectivity setup.
 
-## Setup and Prerequisites
+---
 
-Before you begin, ensure you have the following installed:
+## Table of Contents
 
-* **Docker:** To build the Docker image.
-* **Kubernetes (e.g., Minikube, kind, or a cloud-based Kubernetes cluster):** To deploy the application.
-* **Helm:** To manage the Kubernetes deployment.
-* **kubectl:** To interact with the Kubernetes cluster.
-* **Node.js and npm:** To run the application and tests.
+1. [Prerequisites](#prerequisites)
+2. [Building the Docker Container](#building-the-docker-container)
+3. [Deploying the Application and MongoDB using Helm](#deploying-the-application-and-mongodb-using-helm)
+4. [Customizing Deployment Parameters](#customizing-deployment-parameters)
+5. [Rolling Updates and Service Connectivity](#rolling-updates-and-service-connectivity)
+6. [Key Decisions and Implementation Explanation](#key-decisions-and-implementation-explanation)
 
-## Step-by-Step Instructions
+---
 
-### 1. Build the Docker Container
+## Prerequisites
 
-1.  Navigate to the project directory.
-2.  Build the Docker image using the following command:
+Before you start, make sure the following software is installed:
 
-    ```bash
-    docker build -t <your-docker-username>/devops-assignment:latest .
-    ```
+- **Docker** – for building and running containers
+- **Minikube**, **kind**, or another local Kubernetes distribution – for the Kubernetes cluster
+- **kubectl** – command-line tool to interact with Kubernetes clusters
+- **Helm** – for packaging and deploying Kubernetes applications using Helm charts
 
-    * This command builds the Docker image and tags it as `<your-docker-username>/devops-assignment:latest`. Replace `<your-docker-username>` with your Docker Hub username or the username of your container registry.
+Additionally, ensure you have admin/root privileges to install necessary tools and an active internet connection.
 
-3.  (Optional) Push the Docker image to a container registry (e.g., Docker Hub):
+---
 
-    ```bash
-    docker push <your-docker-username>/devops-assignment:latest
-    ```
+## Building the Docker Container
 
-### 2. Deploy the Application and MongoDB using Helm
+### Step 1: Clone the Repository
 
-1.  Navigate to the `k8s-chart` directory.
-2.  Install the Helm chart:
-
-    ```bash
-    helm install <release-name> ./k8s-chart
-    ```
-
-    * This command deploys the application and MongoDB database to your Kubernetes cluster. Replace `<release-name>` with the desired name for your Helm release (e.g., `my-release`).
-
-### 3. Verify the Deployment
-
-1.  Check the status of the MongoDB StatefulSet:
-
-    ```bash
-    kubectl get statefulsets <release-name>-mongo
-    ```
-
-    * Replace `<release-name>` with your release name.
-
-2.  Check the status of the application Job:
-
-    ```bash
-    kubectl get jobs <release-name>-k8s-test
-    ```
-    * Replace `<release-name>` with your release name.
-
-3.  Check the logs of the `k8s-test` Job to verify successful MongoDB connection:
-
-    ```bash
-    kubectl logs <your-k8s-test-pod-name>
-    ```
-
-    * Replace `<your-k8s-test-pod-name>` with the name of the Pod created by the Job.
-
-4.  Check the status of the MongoDB Service:
-
-    ```bash
-    kubectl get svc mongodb
-    ```
-
-## Customizing Deployment Parameters
-
-You can customize the deployment parameters by modifying the `values.yaml` file in the `k8s-chart` directory.
-
-* **MongoDB Image and Tag:**
-    * Modify the `mongo.image` and `mongo.tag` values to use a different MongoDB image or tag.
-* **MongoDB Storage Size:**
-    * Modify the `mongo.storageSize` value to change the persistent volume size for MongoDB.
-* **Application Image and Tag:**
-    * Modify the `image.repository`, `image.tag`, and `image.pullPolicy` values to use a different application image or tag.
-* **MongoDB Service Name:**
-    * Modify the `mongo.mongoServiceName` value to change the name of the MongoDB service.
-* **Application Node Environment:**
-    * Modify the `env.NODE_ENV` to change the node environment.
-* **Application resources:**
-    * Modify the resources section, to change the memory and cpu requests and limits.
-
-After making changes, upgrade the Helm release:
+Clone the repository containing the application files, including the Dockerfile, Node.js application, and other resources:
 
 ```bash
-helm upgrade <release-name> ./k8s-chart
+git clone <repository-url>
+cd <repository-directory>
