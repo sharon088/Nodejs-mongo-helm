@@ -187,9 +187,6 @@ After installing the Helm chart, you can access the application using port forwa
 * **`templates/` Directory Structure:**
     * Contains Kubernetes manifest templates that are rendered by Helm.
 
-    * **`templates/common/`**
-        * `serviceaccount.yaml`: Creates a service account for Pods, enabling controlled access to the Kubernetes API.
-
     * **`templates/mongo/`**
         * `mongo-service.yaml`: Defines a Kubernetes Service to expose the MongoDB StatefulSet, allowing network access to the database.
         * `mongo-statefulset.yaml`: Creates a StatefulSet for deploying MongoDB, ensuring data persistence and stable network identities.
@@ -198,9 +195,6 @@ After installing the Helm chart, you can access the application using port forwa
         * `deployment.yaml`: Defines a Deployment for the application, managing Pod replicas and updates.
         * `service.yaml`: Defines a Kubernetes Service to expose the application.
         * `k8s-test-mongo-job.yaml`: Defines a Job to run the `k8s-test.js` script, verifying MongoDB connectivity.
-
-    * **`templates/tests/`**
-        * `test-connection.yaml`: Provides a basic test connection configuration (provided by Helm).
 
 * **Key Template Explanations:**
 
