@@ -198,8 +198,6 @@ After installing the Helm chart, you can access the application using port forwa
         * `deployment.yaml`: Defines a Deployment for the application, managing Pod replicas and updates.
         * `service.yaml`: Defines a Kubernetes Service to expose the application.
         * `k8s-test-mongo-job.yaml`: Defines a Job to run the `k8s-test.js` script, verifying MongoDB connectivity.
-        * `hpa.yaml`: Defines a HorizontalPodAutoscaler to automatically scale the application.
-        * `ingress.yaml`: Defines an ingress for the application.
 
     * **`templates/tests/`**
         * `test-connection.yaml`: Provides a basic test connection configuration (provided by Helm).
