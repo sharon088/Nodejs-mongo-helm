@@ -98,30 +98,58 @@ We deployed the application and MongoDB database to a Kubernetes cluster using a
 ### Helm Chart Breakdown
 
 * **`values.yaml`:**
-    * Contains configuration values for the deployment, such as image names, tags, ports, and resource limits.
-    * Allows for easy customization of the deployment without modifying the templates directly.
+    * Contains configuration values for the deployment, such as image names, tags, ports, resource limits, and replica counts.
+    * Allows for easy customization of the deployment without modifying the template files directly.
+    * Serves as the single source of truth for all configurable parameters.
+
 * **`Chart.yaml`:**
     * Defines metadata about the Helm chart, such as its name, version, and description.
-* **`templates/` directory:**
+    * Manages chart dependencies and versioning.
+
+* **`templates/` Directory Structure:**
     * Contains Kubernetes manifest templates that are rendered by Helm.
-    * Includes templates for the MongoDB StatefulSet, Service, and application Job.
-    * `k8s-test-mongo-job.yaml`: This job is used to run the test script `k8s-test.js`.
-    * `mongo-service.yaml`: Creates a kubernetes service, that exposes the mongodb statefulset.
-    * `mongo-statefulset.yaml`: Creates a statefulset that runs the mongodb database.
-    * `deployment.yaml`: Creates a deployment that runs the application.
-* **MongoDB Service:**
-    * Exposes the MongoDB database as a Kubernetes Service, allowing the application to connect to it using the service name.
-* **MongoDB StatefulSet:**
-    * Ensures data persistence and consistent network identities for MongoDB Pods.
-    * Uses persistent volumes to store MongoDB data.
-* **Application Job:**
-    * Runs the `k8s-test.js` script to test the connection to the MongoDB database.
-    * Ensures that the test runs once and then terminates.
+
+    * **`templates/common/`**
+        * `serviceaccount.yaml`: Creates a service account for Pods, enabling controlled access to the Kubernetes API.
+
+    * **`templates/mongo/`**
+        * `mongo-service.yaml`: Defines a Kubernetes Service to expose the MongoDB StatefulSet, allowing network access to the database.
+        * `mongo-statefulset.yaml`: Creates a StatefulSet for deploying MongoDB, ensuring data persistence and stable network identities.
+
+    * **`templates/app/`**
+        * `deployment.yaml`: Defines a Deployment for the application, managing Pod replicas and updates.
+        * `service.yaml`: Defines a Kubernetes Service to expose the application.
+        * `k8s-test-mongo-job.yaml`: Defines a Job to run the `k8s-test.js` script, verifying MongoDB connectivity.
+        * `hpa.yaml`: Defines a HorizontalPodAutoscaler to automatically scale the application.
+        * `ingress.yaml`: Defines an ingress for the application.
+
+    * **`templates/tests/`**
+        * `test-connection.yaml`: Provides a basic test connection configuration (provided by Helm).
+
+* **Key Template Explanations:**
+
+    * **MongoDB Service (`mongo-service.yaml`):**
+        * Exposes the MongoDB database as a Kubernetes Service, allowing the application to connect to it using the service name.
+        * Uses `ClusterIP` as the default service type.
+
+    * **MongoDB StatefulSet (`mongo-statefulset.yaml`):**
+        * Ensures data persistence and consistent network identities for MongoDB Pods.
+        * Uses Persistent Volume Claims (PVCs) to store MongoDB data.
+        * Allows for dynamic scaling of MongoDB replicas via `values.yaml`.
+
+    * **Application Deployment (`deployment.yaml`):**
+        * Manages the deployment of the application Pods.
+        * Uses environment variables (e.g., `NODE_ENV`) to configure the application.
+        * Supports rolling updates for seamless deployment changes.
+
+    * **Application Job (`k8s-test-mongo-job.yaml`):**
+        * Runs the `k8s-test.js` script to verify MongoDB connectivity.
+        * Ensures the test script runs to completion and then terminates.
+        * Uses environment variables to pass the MongoDB service name to the test script.
+
 * **Environment Variables:**
     * Used to pass configuration data (like the MongoDB service name) to the application and test scripts.
-    * The `MONGO_SERVICE_NAME` environment variable is passed to the `k8s-test.js` script.
-* **Values.yaml:**
-    * The `values.yaml` file serves as the single source of truth for all configuration values.
+    * The `MONGO_SERVICE_NAME` environment variable is passed to the `k8s-test.js` script, ensuring dynamic service name resolution.
 
 ## Verification, Customization, Rolling Updates, and Service Connectivity
 
