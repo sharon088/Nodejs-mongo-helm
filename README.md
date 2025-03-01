@@ -164,7 +164,6 @@ After installing the Helm chart, you can access the application using port forwa
 3.  **Open your browser:**
 
     * Visit `http://127.0.0.1:8080` to access the application's root endpoint. You should see "Hello!".
-    * Visit `http://127.0.0.1:8080/health` to access the health endpoint. You should see "healthy".
     * Visit `http://127.0.0.1:8080/assignment` to access the assignment endpoint. You should see the `devops-assignment-index.html` content.
 
 4. **Stop Port Forwarding:**
