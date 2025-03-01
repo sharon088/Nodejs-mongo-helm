@@ -9,7 +9,7 @@ spec:
       initContainers:
         - name: wait-for-mongodb
           image: busybox
-          command: ['sh', '-c', 'until nc -z {{ .Values.mongo.mongoServiceName }} {{ .Values.mongo.port }}; do echo waiting for mongodb; sleep 45; done;']
+          command: ['sh', '-c', 'until nc -z {{ .Values.mongo.mongoServiceName }} {{ .Values.mongo.port }}; do echo waiting for mongodb; sleep 30; done;']
       containers:
         - name: k8s-test
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
