@@ -223,8 +223,9 @@ After installing the Helm chart, you can access the application using port forwa
         * Uses environment variables to pass the MongoDB service name to the test script.
 
 * **Environment Variables:**
-    * Used to pass configuration data (like the MongoDB service name) to the application and test scripts.
+    * Used to pass configuration data to the application and test scripts.
     * The `MONGO_SERVICE_NAME` environment variable is passed to the `k8s-test.js` script, ensuring dynamic service name resolution.
+    * The `NODE_ENV` environment variable is passed to the application deployment to define the application's environment.
 
 ## Customization, Rolling Updates, and Service Connectivity
 
@@ -395,10 +396,7 @@ helm upgrade <release-name> ./k8s-chart
     * Using a Kubernetes Job to run the `k8s-test.js` script ensures that the test runs once to completion and then terminates.
     * Jobs are ideal for one-time tasks like testing, as they automatically manage Pod lifecycles and completion.
     * This approach ensures that the test runs in a controlled environment and doesn't interfere with the running application.
-* **Environment Variables:**
-    * Environment variables are used to pass configuration data (like the MongoDB Service name) to the application and test scripts.
-    * This decouples configuration from the application code, making it easier to manage and update.
-    * It also allows for dynamic configuration based on the Kubernetes environment.
+
 * **`values.yaml`:**
     * The `values.yaml` file serves as the single source of truth for all configuration values.
     * This centralizes configuration management, making it easier to customize and maintain the deployment.
