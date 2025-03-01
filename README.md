@@ -332,6 +332,11 @@ After making changes, upgrade the Helm release:
 helm upgrade <release-name> ./k8s-chart
 ```
 
+> [!NOTE]
+> If you encounter an error about an immutable field in the Job, you may need to delete the Job before upgrading. 
+> You can delete the Job using kubectl delete job `<release-name>-k8s-test`.
+
+
 ## Rolling Update and Service Connectivity
 
 ### Rolling Update
