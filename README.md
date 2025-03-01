@@ -333,8 +333,11 @@ helm upgrade <release-name> ./k8s-chart
 ```
 
 > [!NOTE]
-> If you encounter an error about an immutable field in the Job, you may need to delete the Job before upgrading. 
-> You can delete the Job using kubectl delete job `<release-name>-k8s-test`.
+> If the `helm upgrade` command fails with an error message similar to "immutable field in the Job," it indicates that Kubernetes is preventing the modification of a running Job. 
+
+> This typically occurs when you change the image tag or other settings related to the Job.
+
+> To resolve this, delete the existing Job using `kubectl delete job <release-name>-k8s-test`, and then retry the `helm upgrade` command.
 
 
 ## Rolling Update and Service Connectivity
