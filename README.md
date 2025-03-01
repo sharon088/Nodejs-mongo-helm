@@ -171,6 +171,13 @@ After installing the Helm chart, you can access the application using port forwa
 
     * To stop the port forwarding, press `Ctrl + C` in the terminal where the `kubectl port-forward` command is running.
 
+### Verifying Application Health
+
+* The application exposes a `/health` endpoint that provides a simple health check.
+* This endpoint is used by Kubernetes liveness and readiness probes to monitor the application's health.
+* You can access the health endpoint by visiting `http://127.0.0.1:8080/health` after port forwarding. You should see "healthy".
+* This endpoint returns a `200 OK` status code when the application is healthy.
+
 ### Helm Chart Breakdown
 
 * **`values.yaml`:**
@@ -209,6 +216,7 @@ After installing the Helm chart, you can access the application using port forwa
         * Manages the deployment of the application Pods.
         * Uses environment variables (e.g., `NODE_ENV`) to configure the application.
         * Supports rolling updates for seamless deployment changes.
+        * Configures liveness and readiness probes using the `/health` endpoint to ensure application health and availability.
 
     * **Application Job (`k8s-test-mongo-job.yaml`):**
         * Runs the `k8s-test.js` script to verify MongoDB connectivity.
@@ -325,6 +333,20 @@ Here are some examples of parameters you can customize:
 
     * **Explanation:** These parameters configure the `k8s-test-mongo-job.yaml` Job, which runs the test script. You can modify the `command` and `args` to change the test execution. For example, to run a different test script, change the `args` value.
 
+* **Application Liveness and Readiness Probes:**
+
+    ```yaml
+    livenessProbe:
+        httpGet:
+            path: /health
+            port: http
+    readinessProbe:
+        httpGet:
+            path: /health
+            port: http
+    ```
+
+    * **Explanation:** These parameters configure the liveness and readiness probes for the application. The `path` specifies the endpoint to check, and the `port` specifies the port to use. The `http` port name refers to the port defined in the application's service.
 
 After making changes, upgrade the Helm release:
 
