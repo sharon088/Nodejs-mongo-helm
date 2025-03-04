@@ -43,9 +43,6 @@ COPY --from=build /app/node_modules ./node_modules
 # Copy the entire src directory
 COPY --from=build /app/src ./src
 
-# Copy package.json to the root of the app directory
-COPY --from=build /app/package*.json ./
-
 # Copy script file
 COPY --from=build /app/start.sh ./
 
