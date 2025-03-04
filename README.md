@@ -1,4 +1,4 @@
-# DevOps Assignment - Kubernetes Deployment with Helm
+# DevOps - Kubernetes Deployment with Helm
 
 ## Overview
 This project involves containerizing an application, deploying it alongside a MongoDB instance to a local Kubernetes cluster, and orchestrating the deployment using Helm. The goal is to showcase the usage of Docker multi-stage builds, parameterized Helm charts, and reliable deployment strategies (including rolling updates) for a modern microservice application.
